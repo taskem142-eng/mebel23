@@ -5,237 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мебель на Кубани - Каталог</title>
     <style>
-        :root { 
-            --primary: #2c3e50; 
-            --accent: #27ae60; 
-            --bg: #f4f7f6; 
-            --text: #333;
-        }
-
-        body { 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            background: var(--bg); 
-            margin: 0; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100vh; 
-            overflow: hidden; 
-            color: var(--text);
-        }
+        :root { --primary: #2c3e50; --accent: #27ae60; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
-        /* Шапка с логотипом */
-        header { 
-            background: var(--primary); 
-            color: white; 
-            padding: 0.5rem 1.5rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            z-index: 100; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
+        header { background: var(--primary); color: white; padding: 0.5rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .logo-link { height: 50px; display: flex; align-items: center; text-decoration: none; }
+        .logo-img { height: 100%; width: auto; object-fit: contain; }
 
-        .logo-link {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            height: 50px;
-            transition: opacity 0.2s;
-        }
+        .header-controls { display: flex; align-items: center; gap: 12px; flex: 1; justify-content: flex-end; }
+        .search-box { padding: 10px 15px; border-radius: 20px; border: none; width: 100%; max-width: 250px; outline: none; }
 
-        .logo-link:hover { opacity: 0.8; }
+        #mobFilterBtn { display: none; background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
-        .logo-img {
-            height: 100%;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-            justify-content: flex-end;
-        }
-
-        .search-box { 
-            padding: 10px 15px; 
-            border-radius: 20px; 
-            border: none; 
-            width: 100%; 
-            max-width: 250px; 
-            outline: none; 
-            font-size: 14px;
-        }
-
-        #mobFilterBtn {
-            display: none;
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* Основной макет */
-        .main-layout { 
-            display: flex; 
-            flex: 1; 
-            overflow: hidden; 
-            position: relative;
-        }
+        .main-layout { display: flex; flex: 1; overflow: hidden; position: relative; }
         
-        /* Фильтры (aside) */
-        aside { 
-            width: 300px; 
-            background: white; 
-            padding: 20px; 
-            border-right: 1px solid #ddd; 
-            overflow-y: auto; 
-            transition: 0.3s ease; 
-            z-index: 50; 
-        }
-
-        .filter-group { 
-            margin-bottom: 20px; 
-            border-bottom: 1px solid #eee; 
-            padding-bottom: 15px; 
-        }
-
-        .filter-group h4 { 
-            margin: 0 0 12px 0; 
-            font-size: 12px; 
-            text-transform: uppercase; 
-            color: #7f8c8d; 
-            letter-spacing: 1px;
-        }
+        aside { width: 300px; background: white; padding: 20px; border-right: 1px solid #ddd; overflow-y: auto; transition: 0.3s ease; z-index: 50; }
+        .filter-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .filter-group h4 { margin: 0 0 10px 0; font-size: 12px; text-transform: uppercase; color: #7f8c8d; }
         
-        .range-inputs { display: flex; gap: 8px; }
-        .range-inputs input { 
-            width: 50%; 
-            padding: 10px; 
-            border: 1px solid #ddd; 
-            border-radius: 8px; 
-            font-size: 13px; 
-        }
+        select, input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        optgroup { font-style: normal; font-weight: bold; color: var(--primary); background: #f9f9f9; }
+        option { padding: 5px; }
+
+        main { flex: 1; padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         
-        select { 
-            width: 100%; 
-            padding: 10px; 
-            border: 1px solid #ddd; 
-            border-radius: 8px; 
-            background: #fff;
-        }
-
-        /* Сетка товаров */
-        main { 
-            flex: 1; 
-            padding: 20px; 
-            overflow-y: auto; 
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-            gap: 20px; 
-        }
-        
-        .card { 
-            background: white; 
-            border-radius: 12px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-            cursor: pointer; 
-            transition: transform 0.2s; 
-            display: flex; 
-            flex-direction: column; 
-        }
-
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; }
         .card:hover { transform: translateY(-5px); }
-        
-        .gallery-preview { 
-            height: 180px; 
-            background: #fff; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 10px;
-        }
-
-        .gallery-preview img { 
-            max-width: 100%; max-height: 100%; 
-            object-fit: contain; 
-        }
+        .gallery-preview { height: 180px; display: flex; align-items: center; justify-content: center; padding: 10px; background: #fff; }
+        .gallery-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
         .info { padding: 15px; flex-grow: 1; }
-        .info h3 { 
-            font-size: 14px; margin: 0 0 10px; 
-            height: 34px; overflow: hidden; line-height: 1.2; 
-        }
-
+        .info h3 { font-size: 14px; margin: 0 0 10px; height: 34px; overflow: hidden; line-height: 1.2; color: #333; }
         .price { font-size: 18px; font-weight: bold; color: var(--accent); }
 
-        /* Модальное окно */
-        #modal { 
-            display: none; position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); z-index: 1000; 
-            justify-content: center; align-items: center; 
-            padding: 15px; box-sizing: border-box;
-        }
-
-        .modal-content { 
-            background: white; width: 100%; max-width: 1000px; 
-            max-height: 90vh; border-radius: 15px; 
-            display: flex; overflow: hidden; position: relative; 
-        }
-
-        .close-modal { 
-            position: absolute; top: 15px; right: 15px; 
-            font-size: 30px; cursor: pointer; z-index: 110; 
-            background: white; width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        
-        .modal-left { 
-            width: 60%; background: #f9f9f9; 
-            padding: 20px; overflow-y: auto; 
-            display: flex; flex-direction: column; gap: 15px; 
-            border-right: 1px solid #eee; 
-        }
-
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
+        .modal-content { background: white; width: 100%; max-width: 1000px; max-height: 90vh; border-radius: 15px; display: flex; overflow: hidden; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 15px; font-size: 30px; cursor: pointer; background: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .modal-left { width: 60%; background: #f9f9f9; padding: 20px; overflow-y: auto; border-right: 1px solid #eee; }
         .modal-right { width: 40%; padding: 30px; overflow-y: auto; }
-        .modal-left img { width: 100%; border-radius: 10px; }
-        
-        .modal-params { 
-            background: #f8faf9; padding: 15px; border-radius: 10px; 
-            margin: 15px 0; font-size: 14px; border-left: 4px solid var(--accent);
-        }
+        .modal-left img { width: 100%; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-        /* Мобильная адаптация */
         @media (max-width: 768px) {
             #mobFilterBtn { display: block; }
-            .logo-link { height: 40px; }
-            
-            aside { 
-                position: absolute; left: -100%; top: 0; 
-                height: 100%; width: 280px; 
-                box-shadow: 10px 0 20px rgba(0,0,0,0.2); 
-            }
+            aside { position: absolute; left: -100%; top: 0; height: 100%; width: 280px; box-shadow: 10px 0 20px rgba(0,0,0,0.2); }
             aside.active { left: 0; }
-
             .container { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .gallery-preview { height: 130px; }
-            .info h3 { font-size: 12px; height: 28px; }
-
             .modal-content { flex-direction: column; }
-            .modal-left, .modal-right { width: 100%; height: auto; }
-            .close-modal { top: 10px; right: 10px; }
+            .modal-left, .modal-right { width: 100%; }
+            .logo-link { height: 40px; }
         }
     </style>
 </head>
@@ -247,7 +65,7 @@
     </a>
     <div class="header-controls">
         <button id="mobFilterBtn" onclick="toggleFilters()">Фильтры</button>
-        <input type="text" id="searchInput" class="search-box" placeholder="Поиск..." oninput="applyFilters()">
+        <input type="text" id="searchInput" class="search-box" placeholder="Поиск мебели..." oninput="applyFilters()">
     </div>
 </header>
 
@@ -256,35 +74,18 @@
         <div class="filter-group">
             <h4>Категория</h4>
             <select id="catFilter" onchange="applyFilters()">
-                <option value="all">Все категории</option>
+                <option value="all">Все товары</option>
             </select>
         </div>
 
         <div class="filter-group">
             <h4>Ширина (мм)</h4>
-            <div class="range-inputs">
-                <input type="number" id="minWidth" placeholder="От" oninput="applyFilters()">
-                <input type="number" id="maxWidth" placeholder="До" oninput="applyFilters()">
-            </div>
+            <input type="number" id="minWidth" placeholder="От" oninput="applyFilters()" style="margin-bottom:5px">
+            <input type="number" id="maxWidth" placeholder="До" oninput="applyFilters()">
         </div>
 
         <div class="filter-group">
-            <h4>Высота (мм)</h4>
-            <div class="range-inputs">
-                <input type="number" id="minHeight" placeholder="От" oninput="applyFilters()">
-                <input type="number" id="maxHeight" placeholder="До" oninput="applyFilters()">
-            </div>
-        </div>
-
-        <div class="filter-group">
-            <h4>Цвет</h4>
-            <select id="colorFilter" onchange="applyFilters()">
-                <option value="all">Любой цвет</option>
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <h4>Цена</h4>
+            <h4>Сортировка</h4>
             <select id="sortPrice" onchange="applyFilters()">
                 <option value="none">По умолчанию</option>
                 <option value="asc">Сначала дешевле</option>
@@ -292,7 +93,7 @@
             </select>
         </div>
         
-        <button onclick="toggleFilters()" style="width:100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; display: none;" id="mobApplyBtn">Применить</button>
+        <button onclick="toggleFilters()" style="width:100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; display: none;" id="closeMobBtn">Показать результаты</button>
     </aside>
 
     <main onclick="closeSidebarIfOpen()">
@@ -305,11 +106,12 @@
         <span class="close-modal" onclick="closeProduct()">&times;</span>
         <div class="modal-left" id="modalImages"></div>
         <div class="modal-right">
-            <h2 id="modalTitle" style="margin:0;"></h2>
-            <div class="price" id="modalPrice" style="font-size: 26px; margin: 10px 0;"></div>
-            <div class="modal-params" id="modalParams"></div>
-            <h4 style="margin-bottom:5px;">Описание:</h4>
-            <div id="modalDesc" style="font-size: 14px; line-height: 1.5; white-space: pre-line;"></div>
+            <h2 id="modalTitle" style="margin:0; font-size: 22px;"></h2>
+            <div class="price" id="modalPrice" style="font-size: 28px; margin: 15px 0;"></div>
+            <div id="modalParams" style="background:#f8faf9; padding:15px; border-radius:10px; margin-bottom:20px; font-size:14px; border-left: 4px solid var(--accent);"></div>
+            <h4 style="margin-bottom:8px;">Описание:</h4>
+            <div id="modalDesc" style="font-size: 14px; line-height: 1.6; white-space: pre-line; color: #555;"></div>
+            <a id="tgContact" href="https://t.me/+79002730150" target="_blank" style="display: block; margin-top: 25px; padding: 12px; background: #0088cc; color: white; text-align: center; text-decoration: none; border-radius: 8px; font-weight: bold;">Уточнить наличие в Telegram</a>
         </div>
     </div>
 </div>
@@ -325,57 +127,77 @@
         .then(res => res.text())
         .then(xmlStr => {
             const xml = new DOMParser().parseFromString(xmlStr, "text/xml");
+            const catsElements = xml.getElementsByTagName("category");
             
-            // Загрузка категорий
-            const cats = xml.getElementsByTagName("category");
-            const catSelect = document.getElementById('catFilter');
-            for (let cat of cats) {
+            for (let cat of catsElements) {
                 categories[cat.getAttribute("id")] = cat.textContent;
-                catSelect.add(new Option(cat.textContent, cat.getAttribute("id")));
             }
 
-            // Загрузка товаров
-            const offers = xml.getElementsByTagName("offer");
-            const colorSet = new Set();
+            // Группировка категорий по вашему запросу
+            const catSelect = document.getElementById('catFilter');
+            const groups = {
+                "Шкафы": [],
+                "Другая мебель": []
+            };
 
+            // Ключевые слова для раздела Шкафы
+            const wardrobeKeywords = ["шкаф", "пенал", "терминал", "купе", "распашн", "углов"];
+
+            Object.entries(categories).forEach(([id, name]) => {
+                const lowerName = name.toLowerCase();
+                const isWardrobe = wardrobeKeywords.some(key => lowerName.includes(key));
+                
+                if (isWardrobe) groups["Шкафы"].push({id, name});
+                else groups["Другая мебель"].push({id, name});
+            });
+
+            // Наполнение выпадающего списка
+            for (let groupName in groups) {
+                if (groups[groupName].length > 0) {
+                    const optGroup = document.createElement('optgroup');
+                    optGroup.label = groupName;
+                    // Сортируем подразделы по алфавиту внутри группы
+                    groups[groupName].sort((a,b) => a.name.localeCompare(b.name)).forEach(c => {
+                        optGroup.appendChild(new Option(c.name, c.id));
+                    });
+                    catSelect.add(optGroup);
+                }
+            }
+
+            const offers = xml.getElementsByTagName("offer");
             for (let off of offers) {
                 const params = Array.from(off.getElementsByTagName("param"));
-                const getP = (name) => params.find(p => p.getAttribute("name") === name)?.textContent || "";
+                const getP = (n) => params.find(p => p.getAttribute("name") === n)?.textContent || "";
 
-                const item = {
+                allOffers.push({
                     id: off.getAttribute("id"),
                     name: off.getElementsByTagName("name")[0].textContent,
                     price: parseFloat(off.getElementsByTagName("price")[0].textContent),
-                    desc: off.getElementsByTagName("description")[0]?.textContent || "",
+                    desc: off.getElementsByTagName("description")[0]?.textContent || "Описание скоро появится.",
                     catId: off.getElementsByTagName("categoryId")[0].textContent,
                     pics: Array.from(off.getElementsByTagName("picture")).map(p => p.textContent),
                     width: parseInt(getP("Ширина")) || 0,
                     height: parseInt(getP("Высота")) || 0,
                     depth: parseInt(getP("Глубина")) || 0,
                     color: getP("Цвет")
-                };
-                if (item.color) colorSet.add(item.color);
-                allOffers.push(item);
+                });
             }
-
-            const colorSelect = document.getElementById('colorFilter');
-            Array.from(colorSet).sort().forEach(c => colorSelect.add(new Option(c, c)));
             applyFilters();
+        })
+        .catch(err => {
+            document.getElementById('catalog').innerHTML = "Ошибка загрузки данных. Проверьте файл pricelist.xml";
         });
 
     function applyFilters() {
         const query = document.getElementById('searchInput').value.toLowerCase();
         const cat = document.getElementById('catFilter').value;
-        const color = document.getElementById('colorFilter').value;
         const sort = document.getElementById('sortPrice').value;
-
         const minW = parseInt(document.getElementById('minWidth').value) || 0;
         const maxW = parseInt(document.getElementById('maxWidth').value) || Infinity;
 
         let filtered = allOffers.filter(i => {
             return i.name.toLowerCase().includes(query) &&
                    (cat === 'all' || i.catId === cat) &&
-                   (color === 'all' || i.color === color) &&
                    (i.width >= minW && i.width <= maxW);
         });
 
@@ -386,9 +208,14 @@
     }
 
     function render(items) {
-        document.getElementById('catalog').innerHTML = items.map(i => `
+        const container = document.getElementById('catalog');
+        if (items.length === 0) {
+            container.innerHTML = "<div style='grid-column: 1/-1; text-align: center; padding: 40px;'>Товары не найдены</div>";
+            return;
+        }
+        container.innerHTML = items.map(i => `
             <div class="card" onclick="openProduct('${i.id}')">
-                <div class="gallery-preview"><img src="${i.pics[0]}" loading="lazy"></div>
+                <div class="gallery-preview"><img src="${i.pics[0]}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Нет+фото'"></div>
                 <div class="info">
                     <h3>${i.name}</h3>
                     <div class="price">${i.price.toLocaleString()} ₽</div>
@@ -399,15 +226,16 @@
 
     function openProduct(id) {
         const item = allOffers.find(o => o.id === id);
+        if (!item) return;
         document.getElementById('modalTitle').textContent = item.name;
         document.getElementById('modalPrice').textContent = item.price.toLocaleString() + ' ₽';
         document.getElementById('modalDesc').textContent = item.desc;
         document.getElementById('modalParams').innerHTML = `
             <strong>Размеры:</strong> ${item.width}x${item.height}x${item.depth} мм<br>
-            <strong>Цвет:</strong> ${item.color || '—'}<br>
-            <strong>Категория:</strong> ${categories[item.catId]}
+            <strong>Цвет:</strong> ${item.color || 'не указан'}<br>
+            <strong>Категория:</strong> ${categories[item.catId] || '—'}
         `;
-        document.getElementById('modalImages').innerHTML = item.pics.map(p => `<img src="${p}">`).join('');
+        document.getElementById('modalImages').innerHTML = item.pics.map(p => `<img src="${p}" onerror="this.style.display='none'">`).join('');
         document.getElementById('modal').style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
