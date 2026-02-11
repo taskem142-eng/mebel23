@@ -1,15 +1,15 @@
-<header>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEBEL KUBANI - Каталог</title>
+    <title>Мебель на Кубани - Каталог</title>
     <style>
         :root { 
             --primary: #2c3e50; 
             --accent: #27ae60; 
             --bg: #f4f7f6; 
+            --text: #333;
         }
 
         body { 
@@ -20,13 +20,14 @@
             flex-direction: column; 
             height: 100vh; 
             overflow: hidden; 
+            color: var(--text);
         }
         
-        /* Шапка */
+        /* Шапка с логотипом */
         header { 
             background: var(--primary); 
             color: white; 
-            padding: 0.8rem 1.5rem; 
+            padding: 0.5rem 1.5rem; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
@@ -34,10 +35,26 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            height: 50px;
+            transition: opacity 0.2s;
+        }
+
+        .logo-link:hover { opacity: 0.8; }
+
+        .logo-img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex: 1;
             justify-content: flex-end;
         }
@@ -47,7 +64,7 @@
             border-radius: 20px; 
             border: none; 
             width: 100%; 
-            max-width: 300px; 
+            max-width: 250px; 
             outline: none; 
             font-size: 14px;
         }
@@ -71,7 +88,7 @@
             position: relative;
         }
         
-        /* Боковая панель фильтров */
+        /* Фильтры (aside) */
         aside { 
             width: 300px; 
             background: white; 
@@ -113,7 +130,7 @@
             background: #fff;
         }
 
-        /* Контент каталога */
+        /* Сетка товаров */
         main { 
             flex: 1; 
             padding: 20px; 
@@ -133,15 +150,12 @@
             overflow: hidden; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
             cursor: pointer; 
-            transition: transform 0.2s, box-shadow 0.2s; 
+            transition: transform 0.2s; 
             display: flex; 
             flex-direction: column; 
         }
 
-        .card:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
-        }
+        .card:hover { transform: translateY(-5px); }
         
         .gallery-preview { 
             height: 180px; 
@@ -153,153 +167,87 @@
         }
 
         .gallery-preview img { 
-            max-width: 100%; 
-            max-height: 100%; 
+            max-width: 100%; max-height: 100%; 
             object-fit: contain; 
         }
         
         .info { padding: 15px; flex-grow: 1; }
         .info h3 { 
-            font-size: 14px; 
-            margin: 0 0 10px; 
-            color: #2c3e50; 
-            height: 34px; 
-            overflow: hidden; 
-            line-height: 1.2; 
+            font-size: 14px; margin: 0 0 10px; 
+            height: 34px; overflow: hidden; line-height: 1.2; 
         }
 
-        .price { 
-            font-size: 18px; 
-            font-weight: bold; 
-            color: var(--accent); 
-        }
+        .price { font-size: 18px; font-weight: bold; color: var(--accent); }
 
         /* Модальное окно */
         #modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); 
-            z-index: 1000; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 15px;
-            box-sizing: border-box;
+            display: none; position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); z-index: 1000; 
+            justify-content: center; align-items: center; 
+            padding: 15px; box-sizing: border-box;
         }
 
         .modal-content { 
-            background: white; 
-            width: 100%; 
-            max-width: 1100px; 
-            max-height: 90vh; 
-            border-radius: 15px; 
-            display: flex; 
-            overflow: hidden; 
-            position: relative; 
+            background: white; width: 100%; max-width: 1000px; 
+            max-height: 90vh; border-radius: 15px; 
+            display: flex; overflow: hidden; position: relative; 
         }
 
         .close-modal { 
-            position: absolute; 
-            top: 15px; right: 15px; 
-            font-size: 30px; 
-            cursor: pointer; 
-            color: #333; 
-            z-index: 110; 
-            background: white;
-            width: 40px; height: 40px;
+            position: absolute; top: 15px; right: 15px; 
+            font-size: 30px; cursor: pointer; z-index: 110; 
+            background: white; width: 40px; height: 40px;
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         
         .modal-left { 
-            width: 60%; 
-            background: #f9f9f9; 
-            padding: 20px; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 15px; 
+            width: 60%; background: #f9f9f9; 
+            padding: 20px; overflow-y: auto; 
+            display: flex; flex-direction: column; gap: 15px; 
             border-right: 1px solid #eee; 
         }
 
-        .modal-right { 
-            width: 40%; 
-            padding: 30px; 
-            overflow-y: auto; 
-        }
-
-        .modal-gallery img { 
-            width: 100%; 
-            border-radius: 10px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
+        .modal-right { width: 40%; padding: 30px; overflow-y: auto; }
+        .modal-left img { width: 100%; border-radius: 10px; }
         
-        .modal-description { 
-            line-height: 1.6; 
-            color: #555; 
-            font-size: 14px; 
-            white-space: pre-line; 
-            margin-top: 15px; 
-        }
-
         .modal-params { 
-            background: #f8faf9; 
-            padding: 15px; 
-            border-radius: 10px; 
-            margin: 15px 0; 
-            font-size: 14px; 
-            border-left: 4px solid var(--accent);
+            background: #f8faf9; padding: 15px; border-radius: 10px; 
+            margin: 15px 0; font-size: 14px; border-left: 4px solid var(--accent);
         }
 
-        /* Адаптивность для мобильных */
+        /* Мобильная адаптация */
         @media (max-width: 768px) {
             #mobFilterBtn { display: block; }
+            .logo-link { height: 40px; }
             
             aside { 
-                position: absolute; 
-                left: -100%; 
-                top: 0; 
-                height: 100%; 
-                width: 280px; 
+                position: absolute; left: -100%; top: 0; 
+                height: 100%; width: 280px; 
                 box-shadow: 10px 0 20px rgba(0,0,0,0.2); 
             }
-
             aside.active { left: 0; }
 
-            .container { 
-                grid-template-columns: 1fr 1fr; 
-                gap: 12px; 
-            }
-
-            .gallery-preview { height: 140px; }
-            .info { padding: 10px; }
+            .container { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .gallery-preview { height: 130px; }
             .info h3 { font-size: 12px; height: 28px; }
-            .price { font-size: 15px; }
 
-            .modal-content { 
-                flex-direction: column; 
-                max-height: 95vh;
-            }
-
-            .modal-left, .modal-right { 
-                width: 100%; 
-                height: auto; 
-            }
-
-            .modal-right { padding: 20px; }
-            .close-modal { top: 10px; right: 10px; width: 35px; height: 35px; }
+            .modal-content { flex-direction: column; }
+            .modal-left, .modal-right { width: 100%; height: auto; }
+            .close-modal { top: 10px; right: 10px; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: bold; font-size: 18px; letter-spacing: 1px;">MEBEL KUBANI</div>
+    <a href="index.html" class="logo-link">
+        <img src="logo.png" alt="Мебель на Кубани" class="logo-img">
+    </a>
     <div class="header-controls">
         <button id="mobFilterBtn" onclick="toggleFilters()">Фильтры</button>
-        <input type="text" id="searchInput" class="search-box" placeholder="Поиск мебели..." oninput="applyFilters()">
+        <input type="text" id="searchInput" class="search-box" placeholder="Поиск..." oninput="applyFilters()">
     </div>
 </header>
 
@@ -329,14 +277,6 @@
         </div>
 
         <div class="filter-group">
-            <h4>Глубина (мм)</h4>
-            <div class="range-inputs">
-                <input type="number" id="minDepth" placeholder="От" oninput="applyFilters()">
-                <input type="number" id="maxDepth" placeholder="До" oninput="applyFilters()">
-            </div>
-        </div>
-
-        <div class="filter-group">
             <h4>Цвет</h4>
             <select id="colorFilter" onchange="applyFilters()">
                 <option value="all">Любой цвет</option>
@@ -344,7 +284,7 @@
         </div>
 
         <div class="filter-group">
-            <h4>Сортировка цен</h4>
+            <h4>Цена</h4>
             <select id="sortPrice" onchange="applyFilters()">
                 <option value="none">По умолчанию</option>
                 <option value="asc">Сначала дешевле</option>
@@ -352,11 +292,11 @@
             </select>
         </div>
         
-        <button onclick="toggleFilters()" style="width:100%; padding: 12px; background: #eee; border: none; border-radius: 8px; cursor: pointer; display: none;" id="closeFilterBtn">Применить</button>
+        <button onclick="toggleFilters()" style="width:100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; display: none;" id="mobApplyBtn">Применить</button>
     </aside>
 
     <main onclick="closeSidebarIfOpen()">
-        <div id="catalog" class="container">Загрузка товаров...</div>
+        <div id="catalog" class="container">Загрузка каталога...</div>
     </main>
 </div>
 
@@ -365,11 +305,11 @@
         <span class="close-modal" onclick="closeProduct()">&times;</span>
         <div class="modal-left" id="modalImages"></div>
         <div class="modal-right">
-            <h2 id="modalTitle" style="margin-top:0; font-size: 22px;"></h2>
-            <div class="price" id="modalPrice" style="font-size: 28px; margin-bottom: 10px;"></div>
+            <h2 id="modalTitle" style="margin:0;"></h2>
+            <div class="price" id="modalPrice" style="font-size: 26px; margin: 10px 0;"></div>
             <div class="modal-params" id="modalParams"></div>
-            <h4 style="margin-bottom:8px; color: #333;">Описание:</h4>
-            <div class="modal-description" id="modalDesc"></div>
+            <h4 style="margin-bottom:5px;">Описание:</h4>
+            <div id="modalDesc" style="font-size: 14px; line-height: 1.5; white-space: pre-line;"></div>
         </div>
     </div>
 </div>
@@ -378,24 +318,15 @@
     let allOffers = [];
     let categories = {};
 
-    // Управление мобильным меню
-    function toggleFilters() {
-        document.getElementById('sidebar').classList.toggle('active');
-    }
+    function toggleFilters() { document.getElementById('sidebar').classList.toggle('active'); }
+    function closeSidebarIfOpen() { if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('active'); }
 
-    function closeSidebarIfOpen() {
-        if (window.innerWidth <= 768) {
-            document.getElementById('sidebar').classList.remove('active');
-        }
-    }
-
-    // Загрузка данных
     fetch('pricelist.xml')
         .then(res => res.text())
         .then(xmlStr => {
             const xml = new DOMParser().parseFromString(xmlStr, "text/xml");
             
-            // Категории
+            // Загрузка категорий
             const cats = xml.getElementsByTagName("category");
             const catSelect = document.getElementById('catFilter');
             for (let cat of cats) {
@@ -403,7 +334,7 @@
                 catSelect.add(new Option(cat.textContent, cat.getAttribute("id")));
             }
 
-            // Товары
+            // Загрузка товаров
             const offers = xml.getElementsByTagName("offer");
             const colorSet = new Set();
 
@@ -415,7 +346,7 @@
                     id: off.getAttribute("id"),
                     name: off.getElementsByTagName("name")[0].textContent,
                     price: parseFloat(off.getElementsByTagName("price")[0].textContent),
-                    desc: off.getElementsByTagName("description")[0]?.textContent || "Описание уточняйте у менеджера.",
+                    desc: off.getElementsByTagName("description")[0]?.textContent || "",
                     catId: off.getElementsByTagName("categoryId")[0].textContent,
                     pics: Array.from(off.getElementsByTagName("picture")).map(p => p.textContent),
                     width: parseInt(getP("Ширина")) || 0,
@@ -430,9 +361,6 @@
             const colorSelect = document.getElementById('colorFilter');
             Array.from(colorSet).sort().forEach(c => colorSelect.add(new Option(c, c)));
             applyFilters();
-        })
-        .catch(err => {
-            document.getElementById('catalog').innerHTML = "Ошибка загрузки pricelist.xml. Убедитесь, что файл лежит рядом с index.html";
         });
 
     function applyFilters() {
@@ -443,18 +371,12 @@
 
         const minW = parseInt(document.getElementById('minWidth').value) || 0;
         const maxW = parseInt(document.getElementById('maxWidth').value) || Infinity;
-        const minH = parseInt(document.getElementById('minHeight').value) || 0;
-        const maxH = parseInt(document.getElementById('maxHeight').value) || Infinity;
-        const minD = parseInt(document.getElementById('minDepth').value) || 0;
-        const maxD = parseInt(document.getElementById('maxDepth').value) || Infinity;
 
         let filtered = allOffers.filter(i => {
             return i.name.toLowerCase().includes(query) &&
                    (cat === 'all' || i.catId === cat) &&
                    (color === 'all' || i.color === color) &&
-                   (i.width >= minW && i.width <= maxW) &&
-                   (i.height >= minH && i.height <= maxH) &&
-                   (i.depth >= minD && i.depth <= maxD);
+                   (i.width >= minW && i.width <= maxW);
         });
 
         if (sort === 'asc') filtered.sort((a,b) => a.price - b.price);
@@ -464,16 +386,9 @@
     }
 
     function render(items) {
-        const container = document.getElementById('catalog');
-        if (items.length === 0) {
-            container.innerHTML = "<p style='grid-column: 1/-1; text-align: center; padding: 50px;'>Ничего не найдено по вашим параметрам</p>";
-            return;
-        }
-        container.innerHTML = items.map(i => `
+        document.getElementById('catalog').innerHTML = items.map(i => `
             <div class="card" onclick="openProduct('${i.id}')">
-                <div class="gallery-preview">
-                    <img src="${i.pics[0]}" loading="lazy" onerror="this.src='https://via.placeholder.com/200?text=Нет+фото'">
-                </div>
+                <div class="gallery-preview"><img src="${i.pics[0]}" loading="lazy"></div>
                 <div class="info">
                     <h3>${i.name}</h3>
                     <div class="price">${i.price.toLocaleString()} ₽</div>
@@ -484,33 +399,23 @@
 
     function openProduct(id) {
         const item = allOffers.find(o => o.id === id);
-        if(!item) return;
-
         document.getElementById('modalTitle').textContent = item.name;
         document.getElementById('modalPrice').textContent = item.price.toLocaleString() + ' ₽';
-        document.getElementById('modalDesc').innerHTML = item.desc;
+        document.getElementById('modalDesc').textContent = item.desc;
         document.getElementById('modalParams').innerHTML = `
-            <strong>Габариты:</strong> ${item.width} x ${item.height} x ${item.depth} мм<br>
-            <strong>Цвет:</strong> ${item.color || 'не указан'}<br>
-            <strong>Категория:</strong> ${categories[item.catId] || 'Другое'}
+            <strong>Размеры:</strong> ${item.width}x${item.height}x${item.depth} мм<br>
+            <strong>Цвет:</strong> ${item.color || '—'}<br>
+            <strong>Категория:</strong> ${categories[item.catId]}
         `;
-        document.getElementById('modalImages').innerHTML = item.pics.map(p => `
-            <img src="${p}" onerror="this.style.display='none'">
-        `).join('');
-        
+        document.getElementById('modalImages').innerHTML = item.pics.map(p => `<img src="${p}">`).join('');
         document.getElementById('modal').style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Запрет прокрутки сайта под модалкой
+        document.body.style.overflow = 'hidden';
     }
 
     function closeProduct() { 
         document.getElementById('modal').style.display = 'none'; 
         document.body.style.overflow = ''; 
     }
-
-    // Закрытие по кнопке Esc
-    document.addEventListener('keydown', (e) => {
-        if (e.key === "Escape") closeProduct();
-    });
 </script>
 
 </body>
